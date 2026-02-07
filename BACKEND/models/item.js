@@ -12,6 +12,15 @@ const claimSchema = new mongoose.Schema(
       enum: ["lost", "found"],
       required: true,
     },
+    message: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );

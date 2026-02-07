@@ -9,6 +9,7 @@ import EditItem from './component/editItem';
 import Chat from './component/chat';
 import Chats from './component/chats';
 import AdminDashboard from './component/adminDashboard';
+import AboutUs from './component/AboutUs';
 
 
 import './App.css'
@@ -28,6 +29,8 @@ function App() {
 <Route path="/chat/:chatId" element={<Chat />} />
 <Route path="/chats" element={<Chats />} />
 <Route path="/admin" element={<AdminDashboard />} />
+<Route path="/about" element={<AboutUs />} />
+
 
    </Routes>
    </>

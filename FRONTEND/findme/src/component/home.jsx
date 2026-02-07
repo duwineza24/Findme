@@ -24,6 +24,9 @@ const Home = () => {
 
   {/* Navigation */}
   <nav className="flex items-center gap-6">
+    <Link to="/about" className="text-sm text-gray-600 hover:text-[#6B8E6E] transition">
+      About Us
+    </Link>
     <Link to="/login" className="text-sm text-gray-600 hover:text-[#6B8E6E] transition">
       Login
     </Link>

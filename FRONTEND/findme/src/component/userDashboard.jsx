@@ -7,6 +7,8 @@ export default function UserDashboard() {
   const [myItems, setMyItems] = useState([]);
   const [tab, setTab] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [claimingItem, setClaimingItem] = useState(null); // Track which item is being claimed
+  const [claimMessage, setClaimMessage] = useState(""); // Store claim message
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -51,16 +53,36 @@ export default function UserDashboard() {
 
   // Claim an item
   const claimItem = async (id, claimType) => {
-    if (!window.confirm(`Confirm: I ${claimType} this item?`)) return;
-    await fetch(`http://localhost:5000/api/item/${id}/claim`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ claimType }),
-    });
-    fetchData();
+    if (!claimMessage.trim()) {
+      alert("Please provide details about your claim");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/item/${id}/claim`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ claimType, message: claimMessage }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Failed to submit claim");
+        return;
+      }
+
+      alert("Claim submitted successfully!");
+      setClaimingItem(null);
+      setClaimMessage("");
+      fetchData();
+    } catch (err) {
+      console.error("Error claiming item:", err);
+      alert("Error submitting claim");
+    }
   };
 
   // Delete an item
@@ -181,6 +203,7 @@ export default function UserDashboard() {
             {itemsToShow.map((item) => {
               const isOwner = item.userId._id === user._id;
               const hasClaimed = item.claims?.some((c) => c.user._id === user._id);
+              const isClaimingThisItem = claimingItem === item._id;
 
               return (
                 <div
@@ -188,11 +211,11 @@ export default function UserDashboard() {
                   className="group bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden"
                 >
                   {item.image ? (
-                    <div className="relative h-52 overflow-hidden bg-gray-100">
+                    <div className="relative h-40 overflow-hidden bg-gray-100 flex items-center justify-center">
                       <img
                         src={`http://localhost:5000/uploads/${item.image}`}
                         alt={item.title}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="h-full max-h-40 object-contain transition-transform duration-300 group-hover:scale-105"
                       />
                     </div>
                   ) : (
@@ -219,28 +242,60 @@ export default function UserDashboard() {
                     </div>
 
                     <p className="text-sm text-gray-600 mb-2">{item.description}</p>
-                    <p className="text-xs text-gray-500 mb-4"> {item.location}</p>
+                    <p className="text-xs text-gray-500 mb-4">📍 {item.location}</p>
 
-                    {/* ✅ CLAIM BUTTONS */}
+                    {/* ✅ CLAIM SECTION */}
                     {!isOwner && tab === "all" && (
-                      <div className="mt-4 flex flex-col gap-2">
-                        {item.type === "lost" && (
-                          <button
-                            disabled={hasClaimed}
-                            onClick={() => claimItem(item._id, "found")}
-                            className="w-full py-2 rounded-xl font-bold bg-green-500 text-white hover:scale-105 transition disabled:opacity-50"
-                          >
-                            {hasClaimed ? "Already Claimed" : "I FOUND THIS"}
-                          </button>
-                        )}
-                        {item.type === "found" && (
-                          <button
-                            disabled={hasClaimed}
-                            onClick={() => claimItem(item._id, "lost")}
-                            className="w-full py-2 rounded-xl font-bold bg-red-500 text-white hover:scale-105 transition disabled:opacity-50"
-                          >
-                            {hasClaimed ? "Already Claimed" : "I LOST THIS"}
-                          </button>
+                      <div className="mt-4">
+                        {!isClaimingThisItem ? (
+                          <div className="flex flex-col gap-2">
+                            {item.type === "lost" && (
+                              <button
+                                disabled={hasClaimed}
+                                onClick={() => setClaimingItem(item._id)}
+                                className="w-full py-2 rounded-xl font-bold bg-green-500 text-white hover:scale-105 transition disabled:opacity-50"
+                              >
+                                {hasClaimed ? "Already Claimed" : "I FOUND THIS"}
+                              </button>
+                            )}
+                            {item.type === "found" && (
+                              <button
+                                disabled={hasClaimed}
+                                onClick={() => setClaimingItem(item._id)}
+                                className="w-full py-2 rounded-xl font-bold bg-red-500 text-white hover:scale-105 transition disabled:opacity-50"
+                              >
+                                {hasClaimed ? "Already Claimed" : "I LOST THIS"}
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="space-y-3 p-4 border-2 border-gray-200 rounded-xl bg-gray-50">
+                            <h4 className="font-semibold text-gray-800">Provide claim details:</h4>
+                            <textarea
+                              value={claimMessage}
+                              onChange={(e) => setClaimMessage(e.target.value)}
+                              placeholder="Describe unique features, where/when you lost/found it, etc."
+                              className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                              rows="3"
+                            />
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => claimItem(item._id, item.type === "lost" ? "found" : "lost")}
+                                className="flex-1 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+                              >
+                                Submit Claim
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setClaimingItem(null);
+                                  setClaimMessage("");
+                                }}
+                                className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
                         )}
                       </div>
                     )}
@@ -259,24 +314,40 @@ export default function UserDashboard() {
                             {item.claims.map((claim) => (
                               <div
                                 key={claim._id}
-                                className="p-4 border border-gray-200 rounded-xl bg-gray-50 flex justify-between items-center"
+                                className="p-4 border border-gray-200 rounded-xl bg-gray-50"
                               >
-                                <div>
-                                  <p className="text-sm font-semibold text-gray-800">{claim.user.name}</p>
-                                  <p className="text-xs text-gray-600">
-                                    <span>
-                                      Said{" "}
-                                      {claim.claimType === "found" ? (
-                                        <span className="font-bold text-green-600">Found it</span>
-                                      ) : (
-                                        <span className="font-bold text-red-600">Lost it</span>
-                                      )}
-                                    </span>
-                                  </p>
+                                <div className="flex justify-between items-start mb-2">
+                                  <div>
+                                    <p className="text-sm font-semibold text-gray-800">{claim.user.name}</p>
+                                    <p className="text-xs text-gray-600">
+                                      <span>
+                                        Said{" "}
+                                        {claim.claimType === "found" ? (
+                                          <span className="font-bold text-green-600">Found it</span>
+                                        ) : (
+                                          <span className="font-bold text-red-600">Lost it</span>
+                                        )}
+                                      </span>
+                                    </p>
+                                  </div>
+                                  <span className={`text-xs px-2 py-1 rounded-full ${
+                                    claim.status === "pending" && "bg-yellow-100 text-yellow-700"
+                                  } ${
+                                    claim.status === "approved" && "bg-green-100 text-green-700"
+                                  } ${
+                                    claim.status === "rejected" && "bg-red-100 text-red-700"
+                                  }`}>
+                                    {claim.status}
+                                  </span>
                                 </div>
+                                
+                                {claim.message && (
+                                  <p className="text-sm text-gray-600 italic mb-3">"{claim.message}"</p>
+                                )}
+                                
                                 <button
                                   onClick={() => openChat(item._id, claim.user._id)}
-                                  className="px-4 py-2 text-white text-xs font-semibold rounded-lg transition-colors duration-200"
+                                  className="w-full px-4 py-2 text-white text-xs font-semibold rounded-lg transition-colors duration-200"
                                   style={{ backgroundColor: "#6B8E6E" }}
                                   onMouseEnter={(e) => (e.target.style.backgroundColor = "#5a7a5d")}
                                   onMouseLeave={(e) => (e.target.style.backgroundColor = "#6B8E6E")}
