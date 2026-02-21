@@ -11,9 +11,9 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     try {
-      const res = await fetch("http://localhost:5000/api/user/register", {
+      const res = await fetch(`${API_URL}/api/user/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -23,7 +23,7 @@ export default function Register() {
       if (!res.ok) return setError(data.message || "Registration failed");
 
       navigate("/login");
-    } catch {
+    } catch (err) {
       setError("Server not reachable");
     }
   };

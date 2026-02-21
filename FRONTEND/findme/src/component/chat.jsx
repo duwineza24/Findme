@@ -11,9 +11,9 @@ export default function Chat() {
   const [text, setText] = useState("");
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   const fetchChats = async () => {
-    const res = await fetch("http://localhost:5000/api/chat", {
+    const res = await fetch(`${API_URL}/api/chat`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -29,7 +29,7 @@ export default function Chat() {
     if (!chatId) return;
     
     const res = await fetch(
-      `http://localhost:5000/api/chat/${chatId}/messages`,
+      `${API_URL}/api/chat/${chatId}/messages`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -53,7 +53,7 @@ export default function Chat() {
   const sendMessage = async () => {
     if (!text.trim() || !chatId) return;
 
-    await fetch(`http://localhost:5000/api/chat/${chatId}/messages`, {
+    await fetch(`${API_URL}/api/chat/${chatId}/messages`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

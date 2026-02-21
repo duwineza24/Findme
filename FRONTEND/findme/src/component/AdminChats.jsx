@@ -8,7 +8,7 @@ export default function AdminChats() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
     fetchChats();
   }, []);
@@ -18,7 +18,7 @@ export default function AdminChats() {
     
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/admin/chats", {
+      const response = await fetch(`${API_URL}/api/admin/chats`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,7 +44,7 @@ export default function AdminChats() {
     
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/chats/${chatId}/messages`,
+        `${API_URL}/api/admin/chats/${chatId}/messages`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

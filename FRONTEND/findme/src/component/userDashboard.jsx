@@ -13,10 +13,10 @@ export default function UserDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   // Open chat with claim user
   const openChat = async (itemId, otherUserId) => {
-    const res = await fetch("http://localhost:5000/api/chat", {
+    const res = await fetch(`${API_URL}/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,8 +32,8 @@ export default function UserDashboard() {
   const fetchData = async () => {
     try {
       const [allRes, myRes] = await Promise.all([
-        fetch("http://localhost:5000/api/item"),
-        fetch("http://localhost:5000/api/item/my-items", {
+        fetch(`${API_URL}/api/item`),
+        fetch(`${API_URL}/api/item/my-items`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -41,7 +41,7 @@ export default function UserDashboard() {
       setAllItems(await allRes.json());
       setMyItems(await myRes.json());
       setLoading(false);
-    } catch {
+    } catch (err) {
       setLoading(false);
     }
   };
@@ -59,7 +59,7 @@ export default function UserDashboard() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/item/${id}/claim`, {
+      const response = await fetch(`${API_URL}/api/item/${id}/claim`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export default function UserDashboard() {
   // Delete an item
   const deleteItem = async (id) => {
     if (!window.confirm("Delete this item?")) return;
-    await fetch(`http://localhost:5000/api/item/${id}`, {
+    await fetch(`${API_URL}/api/item/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -98,7 +98,7 @@ export default function UserDashboard() {
   // Resolve an item
   const resolveItem = async (id) => {
     if (!window.confirm("Mark item as recovered?")) return;
-    await fetch(`http://localhost:5000/api/item/${id}/resolve`, {
+    await fetch(`${API_URL}/api/item/${id}/resolve`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -213,7 +213,7 @@ export default function UserDashboard() {
                   {item.image ? (
                     <div className="relative h-40 overflow-hidden bg-gray-100 flex items-center justify-center">
                       <img
-                        src={`http://localhost:5000/uploads/${item.image}`}
+                        src={`${API_URL}/uploads/${item.image}`}
                         alt={item.title}
                         className="h-full max-h-40 object-contain transition-transform duration-300 group-hover:scale-105"
                       />

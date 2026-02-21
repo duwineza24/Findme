@@ -12,7 +12,7 @@ const AddItem = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
     setFile(selected);
@@ -42,7 +42,7 @@ const AddItem = () => {
     if (file) formData.append("image", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/item", {
+      const res = await fetch(`${API_URL}/api/item`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

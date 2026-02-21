@@ -5,7 +5,7 @@ export default function AdminClaims() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all"); // all, pending, approved, rejected
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
     fetchClaims();
   }, []);
@@ -15,7 +15,7 @@ export default function AdminClaims() {
     
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/admin/claims", {
+      const response = await fetch(`${API_URL}/api/admin/claims`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -47,7 +47,7 @@ export default function AdminClaims() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/claims/${itemId}/${claimId}`,
+        `${API_URL}/api/admin/claims/${itemId}/${claimId}`,
         {
           method: "PATCH",
           headers: {

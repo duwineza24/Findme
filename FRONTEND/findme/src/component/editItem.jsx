@@ -15,12 +15,12 @@ const EditItem = () => {
   const [currentImage, setCurrentImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
     const fetchItem = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`http://localhost:5000/api/item/${id}`, {
+        const res = await fetch(`${API_URL}/api/item/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -64,7 +64,7 @@ const EditItem = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/item/${id}`, {
+      const res = await fetch(`${API_URL}/api/item/${id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -167,7 +167,7 @@ const EditItem = () => {
         {/* ===== Image Preview ===== */}
         {currentImage && !preview && (
           <img
-            src={`http://localhost:5000/uploads/${currentImage}`}
+            src={`${API_URL}/uploads/${currentImage}`}
             alt="current"
             className="w-32 h-32 object-cover mb-2 rounded"
           />

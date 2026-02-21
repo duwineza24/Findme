@@ -13,7 +13,7 @@ export default function Navbar() {
 
   const chatRef = useRef();
   const notifRef = useRef();
-
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -23,7 +23,7 @@ export default function Navbar() {
   // 🔹 Fetch chats
   useEffect(() => {
     if (!token) return;
-    fetch("http://localhost:5000/api/chat", {
+    fetch(`${API_URL}/api/chat`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -33,7 +33,7 @@ export default function Navbar() {
   // 🔹 Fetch notifications
   useEffect(() => {
     if (!token) return;
-    fetch("http://localhost:5000/api/notification", {
+    fetch(`${API_URL}/api/notification`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -62,7 +62,7 @@ export default function Navbar() {
 
     // Mark as read
     try {
-      await fetch(`http://localhost:5000/api/notification/${notif._id}/read`, {
+      await fetch(`${API_URL}/api/notification/${notif._id}/read`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
