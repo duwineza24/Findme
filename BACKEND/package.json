@@ -8,10 +8,14 @@
     "mongoose": "^9.1.5",
     "multer": "^2.0.2"
   },
-  "scripts": {
-    "dev": "nodemon server.js"
-  },
   "devDependencies": {
     "nodemon": "^3.1.11"
+  },
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
