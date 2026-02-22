@@ -30,5 +30,9 @@ app.use("/api/match", require("./routes/matchRoute"));
 app.use("/api/chat", require("./routes/chatRoutes"));
 app.use("/api/notification", require("./routes/notificationRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
+app.get("/", (req, res) => {
+  res.json({ message: "API is running" });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
