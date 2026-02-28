@@ -17,7 +17,7 @@ app.use(cors({
 }));
 
 // Handle preflight requests
-app.options('*', cors());
+app.options('/{*path}', cors());
 
 // Connect to DB
 connectDB();
