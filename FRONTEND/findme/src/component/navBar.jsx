@@ -23,7 +23,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   // 🔹 Fetch chats
   useEffect(() => {
     if (!token) return;
-    fetch(`${API_URL}/api/chat`, {
+    fetch(`${API_URL}api/chat`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -33,7 +33,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   // 🔹 Fetch notifications
   useEffect(() => {
     if (!token) return;
-    fetch(`${API_URL}/api/notification`, {
+    fetch(`${API_URL}api/notification`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -62,7 +62,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
     // Mark as read
     try {
-      await fetch(`${API_URL}/api/notification/${notif._id}/read`, {
+      await fetch(`${API_URL}api/notification/${notif._id}/read`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });

@@ -13,7 +13,7 @@ export default function Register() {
     setError("");
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     try {
-      const res = await fetch(`${API_URL}/api/user/register`, {
+      const res = await fetch(`${API_URL}api/user/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

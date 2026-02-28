@@ -26,21 +26,21 @@ export default function AdminDashboard() {
   const [activeView, setActiveView] = useState("overview");
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
-    fetch(`${API_URL}/api/admin/stats`, {
+    fetch(`${API_URL}api/admin/stats`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
       .then(setStats)
       .catch(console.error);
 
-    fetch(`${API_URL}/api/admin/items`, {
+    fetch(`${API_URL}api/admin/items`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
       .then(setItems)
       .catch(console.error);
 
-    fetch(`${API_URL}/api/admin/users`, {
+    fetch(`${API_URL}api/admin/users`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
@@ -50,7 +50,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
   const deleteItem = async (id) => {
     if (!window.confirm("Delete this item?")) return;
-    await fetch(`${API_URL}/api/admin/items/${id}`, {
+    await fetch(`${API_URL}api/admin/items/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

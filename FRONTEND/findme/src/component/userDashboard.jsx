@@ -32,8 +32,8 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   const fetchData = async () => {
     try {
       const [allRes, myRes] = await Promise.all([
-        fetch(`${API_URL}/api/item`),
-        fetch(`${API_URL}/api/item/my-items`, {
+        fetch(`${API_URL}api/item`),
+        fetch(`${API_URL}api/item/my-items`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -59,7 +59,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/item/${id}/claim`, {
+      const response = await fetch(`${API_URL}api/item/${id}/claim`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   // Delete an item
   const deleteItem = async (id) => {
     if (!window.confirm("Delete this item?")) return;
-    await fetch(`${API_URL}/api/item/${id}`, {
+    await fetch(`${API_URL}api/item/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -98,7 +98,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   // Resolve an item
   const resolveItem = async (id) => {
     if (!window.confirm("Mark item as recovered?")) return;
-    await fetch(`${API_URL}/api/item/${id}/resolve`, {
+    await fetch(`${API_URL}api/item/${id}/resolve`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });

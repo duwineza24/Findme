@@ -18,7 +18,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/api/admin/chats`, {
+      const response = await fetch(`${API_URL}api/admin/chats`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,7 +44,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     
     try {
       const response = await fetch(
-        `${API_URL}/api/admin/chats/${chatId}/messages`,
+        `${API_URL}api/admin/chats/${chatId}/messages`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

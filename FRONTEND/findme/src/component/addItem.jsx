@@ -42,7 +42,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     if (file) formData.append("image", file);
 
     try {
-      const res = await fetch(`${API_URL}/api/item`, {
+      const res = await fetch(`${API_URL}api/item`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

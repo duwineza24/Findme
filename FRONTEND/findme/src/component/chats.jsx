@@ -9,7 +9,7 @@ export default function Chats() {
   const [chats, setChats] = useState([]);
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
-    fetch(`${API_URL}/api/chat`, {
+    fetch(`${API_URL}api/chat`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())

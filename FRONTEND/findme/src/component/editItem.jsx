@@ -20,7 +20,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     const fetchItem = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`${API_URL}/api/item/${id}`, {
+        const res = await fetch(`${API_URL}api/item/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -64,7 +64,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_URL}/api/item/${id}`, {
+      const res = await fetch(`${API_URL}api/item/${id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
