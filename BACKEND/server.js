@@ -2,26 +2,31 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
-
+const path = require("path");
 
 dotenv.config();
 
 const app = express();
-const path = require("path");
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(cors());
 
+// CORS setup
+app.use(cors({
+  origin: 'https://findme-opal.vercel.app/',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Handle preflight requests
+app.options('*', cors());
+
+// Connect to DB
 connectDB();
 
-
-
-
-
-
-// middleware
-
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 
 
 const userRoute=require("./routes/userRoute")
@@ -39,7 +44,7 @@ app.use("/api/chat", require("./routes/chatRoutes"));
 app.use("/api/notification", require("./routes/notificationRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 
-
+// Default route
 app.get("/", (req, res) => {
   res.json({ message: "API is running" });
 });
@@ -50,3 +55,4 @@ app.listen(PORT, (err) => {
   if (err) console.error(err);
   else console.log(`Server running on port ${PORT}`);
 });
+
