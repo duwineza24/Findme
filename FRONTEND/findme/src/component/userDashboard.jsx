@@ -16,7 +16,7 @@ export default function UserDashboard() {
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   // Open chat with claim user
   const openChat = async (itemId, otherUserId) => {
-    const res = await fetch(`${API_URL}/api/chat`, {
+    const res = await fetch(`${API_URL}api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
