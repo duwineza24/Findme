@@ -10,7 +10,7 @@ const app = express();
 
 // CORS setup
 app.use(cors({
-  origin: 'https://findme-opal.vercel.app/',
+  origin: 'https://findme-psi.vercel.app/',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -55,4 +55,5 @@ app.listen(PORT, (err) => {
   if (err) console.error(err);
   else console.log(`Server running on port ${PORT}`);
 });
+
 
