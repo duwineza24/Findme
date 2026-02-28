@@ -5,7 +5,7 @@ const Home = () => {
   const [items, setItems] = useState([]);
 const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   useEffect(() => {
-    fetch(`${API_URL}/api/item`)
+    fetch(`${API_URL}api/item`)
       .then((res) => res.json())
       .then((data) => setItems(data));
   }, []);
@@ -167,3 +167,4 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 };
 
 export default Home;
+
