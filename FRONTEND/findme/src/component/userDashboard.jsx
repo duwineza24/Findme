@@ -213,7 +213,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
                   {item.image ? (
                     <div className="relative h-40 overflow-hidden bg-gray-100 flex items-center justify-center">
                       <img
-                        src={`${API_URL}/uploads/${item.image}`}
+                        src={`${API_URL}uploads/${item.image}`}
                         alt={item.title}
                         className="h-full max-h-40 object-contain transition-transform duration-300 group-hover:scale-105"
                       />
