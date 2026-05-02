@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./navBar";
 
@@ -13,7 +13,7 @@ export default function UserDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/';
   // Open chat with claim user
   const openChat = async (itemId, otherUserId) => {
     const res = await fetch(`${API_URL}api/chat`, {
@@ -29,7 +29,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
   };
 
   // Fetch all items and my items
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [allRes, myRes] = await Promise.all([
         fetch(`${API_URL}api/item`),
@@ -41,15 +41,16 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
       setAllItems(await allRes.json());
       setMyItems(await myRes.json());
       setLoading(false);
-    } catch (err) {
+    } catch {
       setLoading(false);
     }
-  };
+  }, [API_URL, token]);
 
   useEffect(() => {
     if (!token) navigate("/login");
+    // eslint-disable-next-line
     fetchData();
-  }, []);
+  }, [token, navigate, fetchData]);
 
   // Claim an item
   const claimItem = async (id, claimType) => {

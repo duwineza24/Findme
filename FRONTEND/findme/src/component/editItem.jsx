@@ -15,7 +15,7 @@ const EditItem = () => {
   const [currentImage, setCurrentImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/';
   useEffect(() => {
     const fetchItem = async () => {
       try {

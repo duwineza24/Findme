@@ -12,7 +12,7 @@ const AddItem = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/';
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
     setFile(selected);
@@ -58,7 +58,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
 
       alert("Item added successfully!");
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       setError("Something went wrong");
     } finally {
       setLoading(false);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function Chat() {
@@ -11,8 +11,8 @@ export default function Chat() {
   const [text, setText] = useState("");
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
-  const fetchChats = async () => {
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/';
+  const fetchChats = useCallback(async () => {
     const res = await fetch(`${API_URL}api/chat`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -23,9 +23,9 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
       const current = data.find(c => c._id === chatId);
       setActiveChat(current);
     }
-  };
+  }, [API_URL, token, chatId]);
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     if (!chatId) return;
     
     const res = await fetch(
@@ -36,19 +36,21 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     );
     const data = await res.json();
     setMessages(data);
-  };
+  }, [API_URL, token, chatId]);
 
   useEffect(() => {
+    // eslint-disable-next-line
     fetchChats();
-  }, []);
+  }, [fetchChats]);
 
   useEffect(() => {
     if (chatId) {
+      // eslint-disable-next-line
       fetchMessages();
       const interval = setInterval(fetchMessages, 5000);
       return () => clearInterval(interval);
     }
-  }, [chatId]);
+  }, [chatId, fetchMessages]);
 
   const sendMessage = async () => {
     if (!text.trim() || !chatId) return;

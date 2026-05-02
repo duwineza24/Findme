@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
   const [activeView, setActiveView] = useState("overview");
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/';
   useEffect(() => {
     fetch(`${API_URL}api/admin/stats`, {
       headers: { Authorization: `Bearer ${token}` },

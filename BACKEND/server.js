@@ -9,13 +9,15 @@ dotenv.config();
 const app = express();
 
 // Connect to database
-connectDB();
 
-// Middleware
-app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middleware
+app.use(cors({
+  origin: "https://findme-1-h2rx.onrender.com/"
+}));
 
+app.use(express.urlencoded({ extended: true }));
+connectDB();
 // Serve uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

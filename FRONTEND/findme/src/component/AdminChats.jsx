@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
 
 export default function AdminChats() {
   const [chats, setChats] = useState([]);
@@ -7,13 +6,12 @@ export default function AdminChats() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/';
   useEffect(() => {
     fetchChats();
-  }, []);
+  }, [fetchChats]);
 
-  const fetchChats = async () => {
+  const fetchChats = useCallback(async () => {
     const token = localStorage.getItem("token");
     
     try {
@@ -37,7 +35,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
 
   const viewChatMessages = async (chatId) => {
     const token = localStorage.getItem("token");
@@ -207,7 +205,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000';
                       {selectedChat.itemId?.title || "Chat Messages"}
                     </h2>
                     <div className="flex gap-2 text-sm text-gray-600">
-                      {selectedChat.participants?.map((user, idx) => (
+                      {selectedChat.participants?.map((user) => (
                         <span key={user._id} className="bg-gray-100 px-2 py-1 rounded">
                           {user.name}
                         </span>
