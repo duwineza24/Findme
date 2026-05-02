@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 // Middleware
 app.use(cors({
-  origin: "https://findme-1-h2rx.onrender.com/"
+  origin: "https://findme-1-q9sv.onrender.com/"  // your exact frontend URL
 }));
 
 app.use(express.urlencoded({ extended: true }));
